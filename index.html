@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Topup - Topup Game Favoritmu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background: rgba(15, 15, 15, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 50px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #4a90e2;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #4a90e2;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 60vh;
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                  url('https://digicodes.net/wp-content/uploads/2020/03/digital-top-up-template-slider.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-top: 70px;
+    }
+
+    .hero-content h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Games Section */
+    .games-section {
+      padding: 50px 50px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 32px;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: titleAnimation 1s ease-out;
+    }
+
+    /* Animasi Teks Berganti */
+    .animated-title {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      height: 40px;
+      margin: 0 10px;
+      vertical-align: middle;
+    }
+
+    .animated-title span {
+      display: block;
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUp 3s ease forwards;
+      text-align: center;
+    }
+
+    .animated-title span:nth-child(1) { animation-delay: 0s; }
+    .animated-title span:nth-child(2) { animation-delay: 3s; }
+    .animated-title span:nth-child(3) { animation-delay: 6s; }
+    .animated-title span:nth-child(4) { animation-delay: 9s; }
+
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      10% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      90% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 3px;
+      bottom: -10px;
+      left: 0;
+      background: linear-gradient(90deg, #4a90e2, #00ff88);
+      animation: lineAnimation 1.5s ease-out forwards;
+    }
+
+    @keyframes titleAnimation {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    @keyframes lineAnimation {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+
+    .section-title span {
+      color: #4a90e2;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .game-card {
+      background: #1a1a1a;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardAnimation 0.5s ease-out forwards;
+    }
+
+    .game-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 8px 25px rgba(74, 144, 226, 0.3);
+    }
+
+    .game-image {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .game-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .game-card:hover .game-image img {
+      transform: scale(1.1) rotate(2deg);
+    }
+
+    .game-info {
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: 0.5s;
+    }
+
+    .game-card:hover .game-info::before {
+      left: 100%;
+    }
+
+    .game-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .game-category {
+      font-size: 14px;
+      color: #4a90e2;
+      margin-bottom: 15px;
+    }
+
+    .game-price {
+      font-size: 16px;
+      color: #4a90e2;
+      font-weight: 600;
+    }
+
+    .game-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.9), rgba(0, 255, 136, 0.9));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover .game-overlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .play-button {
+      color: #fff;
+      font-size: 24px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease 0.1s;
+    }
+
+    .game-card:hover .play-button {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer Styles */
+    .footer {
+      background: #1a1a1a;
+      padding: 50px 20px;
+      color: #fff;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-content h3 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .footer-content h3 span {
+      color: #4a90e2;
+    }
+
+    .footer-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-section h4 {
+      color: #4a90e2;
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .footer-section p {
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      color: #fff;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .social-links a:hover {
+      color: #4a90e2;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid #333;
+    }
+
+    .footer-bottom p {
+      color: #888;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .footer-links {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    /* Animasi untuk Game Cards */
+    @keyframes cardAnimation {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Delay untuk setiap card */
+    .game-card:nth-child(1) { animation-delay: 0.1s; }
+    .game-card:nth-child(2) { animation-delay: 0.2s; }
+    .game-card:nth-child(3) { animation-delay: 0.3s; }
+    .game-card:nth-child(4) { animation-delay: 0.4s; }
+    .game-card:nth-child(5) { animation-delay: 0.5s; }
+    .game-card:nth-child(6) { animation-delay: 0.6s; }
+    .game-card:nth-child(7) { animation-delay: 0.7s; }
+    .game-card:nth-child(8) { animation-delay: 0.8s; }
+    .game-card:nth-child(9) { animation-delay: 0.9s; }
+    .game-card:nth-child(10) { animation-delay: 1s; }
+    .game-card:nth-child(11) { animation-delay: 1.1s; }
+    .game-card:nth-child(12) { animation-delay: 1.2s; }
+
+    /* Animasi untuk gambar */
+    .game-image img {
+      transition: transform 0.5s ease;
+    }
+
+    .game-card:hover .game-image img {
+      transform: scale(1.1) rotate(2deg);
+    }
+
+    /* Animasi untuk info */
+    .game-info {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: 0.5s;
+    }
+
+    .game-card:hover .game-info::before {
+      left: 100%;
+    }
+
+    .payment-methods {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .payment-methods h4 {
+      color: #4a90e2;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .payment-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .payment-icons img {
+      height: 30px;
+      filter: grayscale(100%) brightness(1000%);
+      transition: filter 0.3s ease;
+    }
+
+    .payment-icons img:hover {
+      filter: grayscale(0%) brightness(100%);
+    }
+
+    @media (max-width: 768px) {
+      .payment-icons {
+        gap: 15px;
+      }
+      
+      .payment-icons img {
+        height: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="logo">Game<span>Topup</span></a>
+    <div class="nav-links">
+      <a href="#"><i class="fas fa-home"></i> Beranda</a>
+      <a href="#games"><i class="fas fa-gamepad"></i> Game</a>
+      <a href="#support"><i class="fas fa-headset"></i> Support</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Topup Game Favoritmu</h1>
+      <p>Proses cepat, aman, dan terpercaya untuk semua game populer</p>
+    </div>
+  </section>
+
+  <!-- Games Section -->
+  <section class="games-section" id="games">
+    <h2 class="section-title">Pilih Game Favoritmu<div class="animated-title" id="animatedText"></div></h2>
+    <div class="games-grid">
+      <div class="game-card" onclick="window.location.href='ml.php'">
+        <div class="game-image">
+          <img src="https://cdn.oneesports.id/cdn-data/sites/2/2024/12/MLBB_Joy_RoyalProtector-1024x576-1.jpg" alt="Mobile Legends">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Mobile Legends</h3>
+          <p class="game-category">MOBA</p>
+          <p class="game-price">Mulai dari Rp 1.400</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='hok.php'">
+        <div class="game-image">
+          <img src="ying.png" alt="Honor Of Kings">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Honor Of Kings</h3>
+          <p class="game-category">MOBA</p>
+          <p class="game-price">Mulai dari Rp 1.666</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='epep.php'">
+        <div class="game-image">
+          <img src="https://gamebrott.com/wp-content/uploads/2024/04/Capai-100-Juta-Pemain-1024x576.webp" alt="Free Fire">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Free Fire</h3>
+          <p class="game-category">Battle Royale</p>
+          <p class="game-price">Mulai dari Rp 1.500</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='pubg.php'">
+        <div class="game-image">
+          <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/578080/94ddc32dcf085fa01408102441e1a4d298b32f66/capsule_616x353.jpg?t=1736389084" alt="PUBG">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">PUBG</h3>
+          <p class="game-category">Battle Royale</p>
+          <p class="game-price">Mulai dari Rp 7.500</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='valorant.php'">
+        <div class="game-image">
+          <img src="valo.jpg" alt="Valorant">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Valorant</h3>
+          <p class="game-category">FPS</p>
+          <p class="game-price">Mulai dari Rp 55.000</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='genshin.php'">
+        <div class="game-image">
+          <img src="abah.jpg" alt="Genshin Impact">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Genshin Impact</h3>
+          <p class="game-category">RPG</p>
+          <p class="game-price">Mulai dari Rp 12.000</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='lol.php'">
+        <div class="game-image">
+          <img src="lol.jpg" alt="League Of Legends">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">League Of Legends</h3>
+          <p class="game-category">MOBA</p>
+          <p class="game-price">Mulai dari Rp 60.000</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='eggy.php'">
+        <div class="game-image">
+          <img src="https://assets.nintendo.com/image/upload/ar_16:9,c_lpad,w_1240/b_white/f_auto/q_auto/ncom/software/switch/70010000082675/d5e28fa075fb7b94bc3192207d429451e0cdde5e3bd890d0868d9243c0edbee6" alt="Eggy Party">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Eggy Party</h3>
+          <p class="game-category">Party Game</p>
+          <p class="game-price">Mulai dari Rp 2.200</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='undawn.php'">
+        <div class="game-image">
+          <img src="undawn.png" alt="Garena Undawn">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Garena Undawn</h3>
+          <p class="game-category">Survival</p>
+          <p class="game-price">Mulai dari Rp 15.000</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='aov.php'">
+        <div class="game-image">
+          <img src="aope.jpg" alt="Arena Of Valor">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Arena Of Valor</h3>
+          <p class="game-category">MOBA</p>
+          <p class="game-price">Mulai dari Rp 9.500</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='starrail.php'">
+        <div class="game-image">
+          <img src="starrail.jpeg" alt="Honkai Star Rail">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Honkai Star Rail</h3>
+          <p class="game-category">RPG</p>
+          <p class="game-price">Mulai dari Rp 1.400</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+
+      <div class="game-card" onclick="window.location.href='cod.php'">
+        <div class="game-image">
+          <img src="codm.png" alt="Call Of Duty">
+        </div>
+        <div class="game-info">
+          <h3 class="game-title">Call Of Duty Mobile</h3>
+          <p class="game-category">FPS</p>
+          <p class="game-price">Mulai dari Rp 1.400</p>
+        </div>
+        <div class="game-overlay">
+          <span class="play-button">Topup Sekarang</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="support">
+    <div class="footer-content">
+      <h3>Game<span>Topup</span></h3>
+      <div class="footer-links">
+        <div class="footer-section">
+          <h4>Tentang Kami</h4>
+          <p>Platform topup game terpercaya dengan proses cepat dan aman. Kami menyediakan layanan topup untuk berbagai game populer dengan harga terbaik.</p>
+        </div>
+        <div class="footer-section">
+          <h4>Kontak</h4>
+          <p>Email: support@gametopup.com</p>
+          <p>WhatsApp: +62 81388980376</p>
+          <p>Jam Operasional: 24/7</p>
+        </div>
+        <div class="footer-section">
+          <h4>Ikuti Kami</h4>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com/viicenna?igsh=ZDlzcW1uY2k5d2Q0" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="payment-methods">
+          <h4>Metode Pembayaran</h4>
+          <div class="payment-icons">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="BCA" title="Bank BCA">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri" title="Bank Mandiri">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/BNI_logo.svg" alt="BNI" title="Bank BNI">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/BANK_BRI_logo.svg" alt="BRI" title="Bank BRI">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="GoPay" title="GoPay">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg" alt="OVO" title="OVO">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA" title="DANA">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Shopeepay_logo.svg" alt="ShopeePay" title="ShopeePay">
+          </div>
+        </div>
+        <p>&copy; 2024 GameTopup. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tambahkan script sebelum closing body tag -->
+  <script>
+    // Support button scroll
+    document.querySelector('a[href="#support"]').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('support').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+
+    // Game button scroll
+    document.querySelector('a[href="#games"]').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('games').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+
+    // Animasi teks berganti-ganti
+    const texts = [
+      "Game Favoritmu",
+      "Game Populer",
+      "Game Terbaik",
+      "Game Kesukaanmu"
+    ];
+
+    let currentIndex = 0;
+    const animatedText = document.getElementById('animatedText');
+
+    function changeText() {
+      animatedText.style.opacity = '0';
+      animatedText.style.transform = 'translateY(20px)';
+      
+      setTimeout(() => {
+        animatedText.textContent = texts[currentIndex];
+        animatedText.style.opacity = '1';
+        animatedText.style.transform = 'translateY(0)';
+        
+        currentIndex = (currentIndex + 1) % texts.length;
+      }, 500);
+    }
+
+    // Mulai animasi
+    changeText();
+    setInterval(changeText, 3000);
+
+    function getPaymentMethodLabel(value) {
+      const paymentMethods = {
+        'bca': 'Bank BCA',
+        'mandiri': 'Bank Mandiri',
+        'bni': 'Bank BNI',
+        'bri': 'Bank BRI',
+        'gopay': 'GoPay',
+        'ovo': 'OVO',
+        'dana': 'DANA',
+        'shopeepay': 'ShopeePay'
+      };
+      return paymentMethods[value] || value;
+    }
+
+    if (!selectedPayment) {
+        alert('Silakan pilih metode pembayaran');
+        return;
+    }
+  </script>
+</body>
+</html>
